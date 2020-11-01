@@ -15,41 +15,14 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${PROJECT_SOURCE_DIR}/cmake")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
 
-add_library(project_warnings INTERFACE)
 
-if (MSVC)
-    target_compile_options(project_warnings INTERFACE /W4 /WX "/permissive-")
-else ()
-    message(STATUS "Building for Linux")
-    target_compile_options(project_warnings INTERFACE
-            -Wall
-            -Werror
-            -Wextra
-            -Wnon-virtual-dtor
-            -Wold-style-cast
-            -Wcast-align
-            -Wunused
-            -Woverloaded-virtual
-            -Wpedantic
-            -Wconversion
-            -Wsign-conversion
-            -Wnull-dereference
-            -Wdouble-promotion
-            -Wformat=2)
-
-    if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
-        target_compile_options(project_warnings INTERFACE
-                -Wmisleading-indentation
-                -Wduplicated-cond
-                -Wduplicated-branches
-                -Wlogical-op
-                -Wuseless-cast)
-    endif ()
-endif ()
+include(ProjectWarnings)
+include(DockerBuild)
 
 add_subdirectory(src)
 

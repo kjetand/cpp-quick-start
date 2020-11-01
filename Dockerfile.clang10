@@ -1,0 +1,12 @@
+FROM ubuntu
+RUN apt update && apt -y install cmake clang-10
+
+COPY . /usr/src/
+WORKDIR /usr/src/
+
+RUN export CXX=/usr/bin/clang++-10 \
+ && mkdir build \
+ && cd build \
+ && cmake .. \
+ && make -j 24 \
+ && ctest -V
